@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.project.entity.Employee;
-import com.project.manager.EmployeeManager;
 import com.project.utils.HttpServletUtil;
 import com.project.utils.UUIDLong;
+import com.project.entity.User;
+import com.project.manager.UserManager;
 
 
 @Controller
-@RequestMapping("/employee")
-public class EmployeeController {
+@RequestMapping("/user")
+public class UserController {
 	
 	@Autowired
-	private EmployeeManager employeeManager;
+	private UserManager userManager;
 	
 	/**
 	 * 保存人员
@@ -34,8 +34,8 @@ public class EmployeeController {
 		HttpServletUtil.initResponse(response);
 		String name = request.getParameter("name");
 
-		Employee employee = new Employee(UUIDLong.longUUID(), name);
-		employeeManager.save(employee);
+		User employee = new User(UUIDLong.longUUID(), name);
+		userManager.save(employee);
 		
 		return HttpServletUtil.getResponseJsonData(0, "保存数据成功！");
 	}
