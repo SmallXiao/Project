@@ -33,7 +33,7 @@
 	</plugins>
 
 	<mappers>
-		<mapper resource="mybatis/mapper/EmployeeMapper.xml" />
+		<mapper resource="mybatis/mapper/UserMapper.xml" />
 
 	</mappers>
 </configuration>
