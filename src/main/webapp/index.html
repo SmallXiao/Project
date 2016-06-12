@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html>
-	<head>
-	    <title>First Page</title>
-	    <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
-		
-	</head>
-	<body>
-		
-		<script>
-			$(function (){
-				var _name = "hello";
-				$.ajax({
-					type: "POST",
-					url: "employee/save",
-					dataType: "JSON",
-					data:{"name":_name},
-					async: true,
-					success: function(result){
-						alert(result.errMsg);
-					}
-					
-				});
+<head>
+    <title>First Page</title>
+    <script type="text/javascript" src="js/jquery-1.11.1.js"></script>	
+</head>
+<body>	
+<h1>hello!</h1>	
+	<script>
+		/* $(function (){
+			var _name = "hello";
+			$.ajax({
+				type: "POST",
+				url: "employee/save",
+				dataType: "JSON",
+				data:{"name":_name},
+				async: true,
+				success: function(result){
+					alert(result.errMsg);
+				}
 				
 			});
-				
-		</script>
-	</body>
+			
+		}); */
+			
+	</script>
+</body>
 </html>
