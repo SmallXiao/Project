@@ -3,20 +3,17 @@ package com.project.entity;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-/**
- * 年报
- * @author SunXiao
- *
- */
-public class YearReport {
+public class WeekReport {
 	private Long id;
-	private Date date;// 年份
+	private Date beginDate;// 开始日期
+	private Date endDate;// 结束日期
 	private String workName;// 项目名称、团队名称、工作名称
 	private String taskAim;// 工作任务
 	private String taskDetail;// 任务详情
 	private String taskResult;// 任务结果
 	private String userId;// 人员ID
 	private String companyId;// 公司ID
+	private Integer weekOfMonth;// 一个月的第几周
 	private Timestamp createTime;// 创建时间
 	private Timestamp updateTime;// 更新时间
 	
@@ -26,11 +23,17 @@ public class YearReport {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Date getDate() {
-		return date;
+	public Date getBeginDate() {
+		return beginDate;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 	public String getWorkName() {
 		return workName;
@@ -67,6 +70,12 @@ public class YearReport {
 	}
 	public void setCompanyId(String companyId) {
 		this.companyId = companyId;
+	}
+	public Integer getWeekOfMonth() {
+		return weekOfMonth;
+	}
+	public void setWeekOfMonth(Integer weekOfMonth) {
+		this.weekOfMonth = weekOfMonth;
 	}
 	public Timestamp getCreateTime() {
 		return createTime;

@@ -1,6 +1,7 @@
 package com.project.controller;
 
 import java.sql.Date;
+import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,19 +14,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.entity.DailyReport;
 import com.project.entity.WeekReport;
-import com.project.entity.YearReport;
-import com.project.manager.YearReportManager;
+import com.project.manager.WeekReportManager;
 import com.project.utils.HttpServletUtil;
+import com.project.utils.UUIDLong;
 
 @Controller
-@RequestMapping("/monthReport")
-public class YearReportController {
+@RequestMapping("weekReport")
+public class WeekReportController {
 
 	@Autowired
-	private YearReportManager yearReportManager;
-
+	private WeekReportManager weekReportManager;
+	
 	/**
-	 * 保存年报信息
+	 * 保存周报信息
 	 * @param request
 	 * @param response
 	 * @return
@@ -41,23 +42,30 @@ public class YearReportController {
 		String taskResult = request.getParameter("taskResult");// 任务结果
 		String userId = request.getParameter("userId");// 用户ID
 		String companyId = request.getParameter("companyId");// 公司ID
+		String beginDateStr = request.getParameter("beginDate");// 开始时间
+		String endDateStr = request.getParameter("endDate");// 结束时间
 		
-		YearReport yearReport = new YearReport();
-		/*dailyReport.setId(UUIDLong.longUUID());
-		dailyReport.setDate(new Date(Long.parseLong(dateStr)));
-		dailyReport.setWorkName(workName);
-		dailyReport.setTaskAim(taskAim);
-		dailyReport.setTaskDetail(taskDetail);
-		dailyReport.setTaskResult(taskResult);
-		dailyReport.setUserId(userId);
-		dailyReport.setCompanyId(companyId);*/
-		yearReportManager.save(yearReport);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.get(Calendar.w)
 		
-		return HttpServletUtil.getResponseJsonData(0, "保存年报数据成功！");
+		WeekReport weekReport = new WeekReport();
+		weekReport.setId(UUIDLong.longUUID());
+		weekReport.setBeginDate(beginDate);
+		weekReport.setEndDate(endDate);
+		weekReport.setWorkName(workName);
+		weekReport.setTaskAim(taskAim);
+		weekReport.setTaskDetail(taskDetail);
+		weekReport.setTaskResult(taskResult);
+		weekReport.setUserId(userId);
+		weekReport.setCompanyId(companyId);
+		weekReportManager.save(weekReport);
+		
+		return HttpServletUtil.getResponseJsonData(0, "保存周报数据成功！");
 	}
 	
 	/**
-	 * 删除年报信息
+	 * 删除周报信息
 	 * @param request
 	 * @param response
 	 * @return
@@ -71,11 +79,11 @@ public class YearReportController {
 		
 		weekReportManager.delete(userId, new Date(Long.parseLong(dateStr)));
 		
-		return HttpServletUtil.getResponseJsonData(0, "删除年报数据成功！");
+		return HttpServletUtil.getResponseJsonData(0, "删除周报数据成功！");
 	}
 	
 	/**
-	 * 更新年报信息
+	 * 更新周报信息
 	 * @param request
 	 * @param response
 	 * @return
@@ -91,21 +99,21 @@ public class YearReportController {
 		String userId = request.getParameter("userId");// 用户ID
 		String companyId = request.getParameter("companyId");// 公司ID
 		
-		DailyReport dailyReport = new DailyReport();
-		dailyReport.setDate(new Date(Long.parseLong(dateStr)));
-		dailyReport.setWorkName(workName);
-		dailyReport.setTaskAim(taskAim);
-		dailyReport.setTaskDetail(taskDetail);
-		dailyReport.setTaskResult(taskResult);
-		dailyReport.setUserId(userId);
-		dailyReport.setCompanyId(companyId);
-		weekReportManager.update(dailyReport);
+		WeekReport weekReport = new WeekReport();
+		weekReport.setBeginDate(beginDate);
+		weekReport.setWorkName(workName);
+		weekReport.setTaskAim(taskAim);
+		weekReport.setTaskDetail(taskDetail);
+		weekReport.setTaskResult(taskResult);
+		weekReport.setUserId(userId);
+		weekReport.setCompanyId(companyId);
+		weekReportManager.update(weekReport);
 		
-		return HttpServletUtil.getResponseJsonData(0, "更新年报数据成功！");
+		return HttpServletUtil.getResponseJsonData(0, "更新周报数据成功！");
 	}
 	
 	/**
-	 * 得到某年年报信息
+	 * 得到某天日报信息
 	 * @param request
 	 * @param response
 	 * @return
@@ -123,5 +131,6 @@ public class YearReportController {
 		
 		return HttpServletUtil.getResponseJsonData(0, "保存数据成功！");
 	}
+	
 	
 }

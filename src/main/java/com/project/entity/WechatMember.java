@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class WechatMember{
 
-    private String id;
+    private Long id;
     
     //微信企业号设置的登录名
     private String userId;
@@ -52,11 +52,12 @@ public class WechatMember{
     //菜单id
   	private String menuId;
 
-	public String getId() {
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
