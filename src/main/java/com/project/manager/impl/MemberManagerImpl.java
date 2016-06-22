@@ -2,10 +2,12 @@ package com.project.manager.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import com.project.entity.WechatMember;
 import com.project.manager.MemberManager;
 
+@Service("memberManager")
 public class MemberManagerImpl implements MemberManager{
 
 	private static Logger log = LogManager.getLogger(MemberManagerImpl.class);

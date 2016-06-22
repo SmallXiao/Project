@@ -12,7 +12,7 @@ import com.project.entity.DailyReport;
 import com.project.manager.DailyReportManager;
 import com.project.mapper.DailyReportMapper;
 
-@Service("dailyManager")
+@Service("dailyReportManager")
 public class DailyReportManagerImpl implements DailyReportManager{
 
 	private static Logger log = LogManager.getLogger(DailyReportManagerImpl.class);

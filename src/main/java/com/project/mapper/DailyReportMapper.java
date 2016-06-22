@@ -3,6 +3,8 @@ package com.project.mapper;
 import java.sql.Date;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.project.entity.DailyReport;
 
 public interface DailyReportMapper {
@@ -16,7 +18,7 @@ public interface DailyReportMapper {
 	 * 删除日报信息
 	 * @param dailyReport
 	 */
-	public void delete(String userId, Date date);
+	public void delete(@Param("userId") String userId, @Param("date") Date date);
 	
 	/**
 	 * 更新日报信息
@@ -27,13 +29,13 @@ public interface DailyReportMapper {
 	/**
 	 * 获取某人某天的日报信息
 	 */
-	public DailyReport getByUserIdAndDate(String userId, Date date);
+	public DailyReport getByUserIdAndDate(@Param("userId") String userId, @Param("date") Date date);
 	
 	/**
 	 * 获取某公司某天的日报信息
 	 * @param companyId
 	 * @param date
 	 */
-	public List<DailyReport> getByCompanyIdAndDate(String companyId, Date date);
+	public List<DailyReport> getByCompanyIdAndDate(@Param("companyId") String companyId, @Param("date") Date date);
 	
 }

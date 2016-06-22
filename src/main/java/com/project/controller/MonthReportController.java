@@ -1,7 +1,5 @@
 package com.project.controller;
 
-import java.sql.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.project.entity.DailyReport;
 import com.project.entity.MonthReport;
 import com.project.manager.MonthReportManager;
+import com.project.utils.DateUtils;
 import com.project.utils.HttpServletUtil;
 import com.project.utils.UUIDLong;
 
@@ -34,8 +33,7 @@ public class MonthReportController {
 	@ResponseBody
 	public String save(HttpServletRequest request, HttpServletResponse response){
 		HttpServletUtil.initResponse(response);
-		String beginDateStr = request.getParameter("beginDate");// 开始日期
-		String endDateStr = request.getParameter("endDate");// 开始日期
+		String dateStr = request.getParameter("beginDate");// 填写日期
 		String workName = request.getParameter("workName");// 项目名称、团队名称、工作名称
 		String taskAim = request.getParameter("taskAim");// 任务目标
 		String taskDetail = request.getParameter("taskDetail");// 任务详情
@@ -45,8 +43,8 @@ public class MonthReportController {
 		
 		MonthReport monthReport = new MonthReport();
 		monthReport.setId(UUIDLong.longUUID());
-		monthReport.setBeginDate(beginDate);
-		monthReport.setEndDate(endDate);
+		monthReport.setBeginDate(DateUtils.getMinMonthDate(dateStr));// 月报开始日期
+		monthReport.setEndDate(DateUtils.getMaxMonthDate(dateStr));// 月报结束日期
 		monthReport.setWorkName(workName);
 		monthReport.setTaskAim(taskAim);
 		monthReport.setTaskDetail(taskDetail);
@@ -55,7 +53,7 @@ public class MonthReportController {
 		monthReport.setCompanyId(companyId);
 		monthReportManager.save(monthReport);
 		
-		return HttpServletUtil.getResponseJsonData(0, "保存日报数据成功！");
+		return HttpServletUtil.getResponseJsonData(0, "保存月报数据成功！");
 	}
 	
 	/**
@@ -71,9 +69,9 @@ public class MonthReportController {
 		String dateStr= request.getParameter("date");
 		String userId = request.getParameter("userId");
 		
-		monthReportManager.delete(userId, new Date(Long.parseLong(dateStr)));
+		monthReportManager.delete(userId, DateUtils.stringToDate(dateStr));
 		
-		return HttpServletUtil.getResponseJsonData(0, "删除日报数据成功！");
+		return HttpServletUtil.getResponseJsonData(0, "删除月报数据成功！");
 	}
 	
 	/**
@@ -94,25 +92,26 @@ public class MonthReportController {
 		String companyId = request.getParameter("companyId");// 公司ID
 		
 		MonthReport monthReport = new MonthReport();
-		/*dailyReport.setDate(new Date(Long.parseLong(dateStr)));
-		dailyReport.setWorkName(workName);
-		dailyReport.setTaskAim(taskAim);
-		dailyReport.setTaskDetail(taskDetail);
-		dailyReport.setTaskResult(taskResult);
-		dailyReport.setUserId(userId);
-		dailyReport.setCompanyId(companyId);*/
+		monthReport.setBeginDate(DateUtils.getMinMonthDate(dateStr));
+		monthReport.setEndDate(DateUtils.getMaxMonthDate(dateStr));
+		monthReport.setWorkName(workName);
+		monthReport.setTaskAim(taskAim);
+		monthReport.setTaskDetail(taskDetail);
+		monthReport.setTaskResult(taskResult);
+		monthReport.setUserId(userId);
+		monthReport.setCompanyId(companyId);
 		monthReportManager.update(monthReport);
 		
-		return HttpServletUtil.getResponseJsonData(0, "更新日报数据成功！");
+		return HttpServletUtil.getResponseJsonData(0, "更新月报数据成功！");
 	}
 	
 	/**
-	 * 得到某天日报信息
+	 * 得到某月月报信息
 	 * @param request
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value="/getByDay", method=RequestMethod.POST)
+	@RequestMapping(value="/getByDay", method=RequestMethod.GET)
 	@ResponseBody
 	public String getByDay(HttpServletRequest request, HttpServletResponse response){
 		HttpServletUtil.initResponse(response);
@@ -123,6 +122,6 @@ public class MonthReportController {
 		//Date date = new Da
 		//dailyReportManager.getByUserIdAndDate(userId, date);
 		
-		return HttpServletUtil.getResponseJsonData(0, "保存数据成功！");
+		return HttpServletUtil.getResponseJsonData(0, "得到月报数据成功！");
 	}
 }

@@ -1,7 +1,5 @@
 package com.project.controller;
 
-import java.sql.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.entity.DailyReport;
 import com.project.manager.DailyReportManager;
+import com.project.utils.DateUtils;
 import com.project.utils.HttpServletUtil;
 import com.project.utils.UUIDLong;
 
@@ -43,7 +42,7 @@ public class DailyReportController {
 		
 		DailyReport dailyReport = new DailyReport();
 		dailyReport.setId(UUIDLong.longUUID());
-		dailyReport.setDate(new Date(Long.parseLong(dateStr)));
+		dailyReport.setDate(DateUtils.stringToDate(dateStr));
 		dailyReport.setWorkName(workName);
 		dailyReport.setTaskAim(taskAim);
 		dailyReport.setTaskDetail(taskDetail);
@@ -68,7 +67,7 @@ public class DailyReportController {
 		String dateStr= request.getParameter("date");
 		String userId = request.getParameter("userId");
 		
-		dailyReportManager.delete(userId, new Date(Long.parseLong(dateStr)));
+		dailyReportManager.delete(userId, DateUtils.stringToDate(dateStr));
 		
 		return HttpServletUtil.getResponseJsonData(0, "删除日报数据成功！");
 	}
@@ -91,7 +90,7 @@ public class DailyReportController {
 		String companyId = request.getParameter("companyId");// 公司ID
 		
 		DailyReport dailyReport = new DailyReport();
-		dailyReport.setDate(new Date(Long.parseLong(dateStr)));
+		dailyReport.setDate(DateUtils.stringToDate(dateStr));
 		dailyReport.setWorkName(workName);
 		dailyReport.setTaskAim(taskAim);
 		dailyReport.setTaskDetail(taskDetail);
@@ -109,7 +108,7 @@ public class DailyReportController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value="/getByDay", method=RequestMethod.POST)
+	@RequestMapping(value="/getByDay", method=RequestMethod.GET)
 	@ResponseBody
 	public String getByDay(HttpServletRequest request, HttpServletResponse response){
 		HttpServletUtil.initResponse(response);
@@ -120,6 +119,6 @@ public class DailyReportController {
 		//Date date = new Da
 		//dailyReportManager.getByUserIdAndDate(userId, date);
 		
-		return HttpServletUtil.getResponseJsonData(0, "保存数据成功！");
+		return HttpServletUtil.getResponseJsonData(0, "得到日报数据成功！");
 	}
 }

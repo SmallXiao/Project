@@ -3,9 +3,12 @@ package com.project.manager.impl;
 import java.sql.Date;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.project.entity.MonthReport;
 import com.project.manager.MonthReportManager;
 
+@Service("monthReportManager")
 public class MonthReportManagerImpl implements MonthReportManager{
 
 	@Override

@@ -1,11 +1,11 @@
 package com.project.mapper;
 
-import com.project.entity.Employee;
+import com.project.entity.User;
 
 
 public interface EmployeeMapper {
 	
-	public void save(Employee employee);
+	public void save(User employee);
 	
 	
 }

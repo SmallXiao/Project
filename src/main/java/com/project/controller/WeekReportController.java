@@ -1,8 +1,5 @@
 package com.project.controller;
 
-import java.sql.Date;
-import java.util.Calendar;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.project.entity.DailyReport;
 import com.project.entity.WeekReport;
 import com.project.manager.WeekReportManager;
+import com.project.utils.DateUtils;
 import com.project.utils.HttpServletUtil;
 import com.project.utils.UUIDLong;
 
 @Controller
-@RequestMapping("weekReport")
+@RequestMapping("/weekReport")
 public class WeekReportController {
 
 	@Autowired
@@ -42,17 +39,11 @@ public class WeekReportController {
 		String taskResult = request.getParameter("taskResult");// 任务结果
 		String userId = request.getParameter("userId");// 用户ID
 		String companyId = request.getParameter("companyId");// 公司ID
-		String beginDateStr = request.getParameter("beginDate");// 开始时间
-		String endDateStr = request.getParameter("endDate");// 结束时间
-		
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.get(Calendar.w)
 		
 		WeekReport weekReport = new WeekReport();
 		weekReport.setId(UUIDLong.longUUID());
-		weekReport.setBeginDate(beginDate);
-		weekReport.setEndDate(endDate);
+		weekReport.setBeginDate(DateUtils.getCurrentMonday(dateStr));// 本周开始日期
+		weekReport.setEndDate(DateUtils.getPreviousSunday(dateStr));// 本周结束日期
 		weekReport.setWorkName(workName);
 		weekReport.setTaskAim(taskAim);
 		weekReport.setTaskDetail(taskDetail);
@@ -77,7 +68,7 @@ public class WeekReportController {
 		String dateStr= request.getParameter("date");
 		String userId = request.getParameter("userId");
 		
-		weekReportManager.delete(userId, new Date(Long.parseLong(dateStr)));
+		weekReportManager.delete(userId, DateUtils.stringToDate(dateStr));
 		
 		return HttpServletUtil.getResponseJsonData(0, "删除周报数据成功！");
 	}
@@ -100,7 +91,8 @@ public class WeekReportController {
 		String companyId = request.getParameter("companyId");// 公司ID
 		
 		WeekReport weekReport = new WeekReport();
-		weekReport.setBeginDate(beginDate);
+		weekReport.setBeginDate(DateUtils.getCurrentMonday(dateStr));
+		weekReport.setEndDate(DateUtils.getPreviousSunday(dateStr));
 		weekReport.setWorkName(workName);
 		weekReport.setTaskAim(taskAim);
 		weekReport.setTaskDetail(taskDetail);
@@ -124,7 +116,7 @@ public class WeekReportController {
 		HttpServletUtil.initResponse(response);
 		String userId = request.getParameter("userId");
 		String dateStr = request.getParameter("date");
-		DailyReport dailyReport = new DailyReport();
+		//DailyReport dailyReport = new DailyReport();
 		
 		//Date date = new Da
 		//dailyReportManager.getByUserIdAndDate(userId, date);
