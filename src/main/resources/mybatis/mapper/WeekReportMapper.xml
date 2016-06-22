@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.mapper.WeekReportMapper">
+
+	<insert id="save" parameterType="WeekReport">
+		INSERT INTO daily_report(id,date,work_name,task_aim,task_detail,task_result,user_id,company_id) 
+			VALUES(#{id},#{date},#{workName},#{taskAim},#{taskDetail},#{taskResult},#{userId},#{companyId})
+	</insert>
+	
+	<delete id="delete" parameterType="java.lang.String">
+		DELETE FROM daily_report WHERE user_id=#{userId} AND date=#{date}
+	</delete>
+	
+	<update id="update" parameterType="WeekReport">
+		UPDATE daily_report SET work_name=#{workName},task_aim=#{taskAim},task_result=#{taskResult}
+			WHERE user_id=#{userId} AND date=#{date}
+	</update>
+	
+</mapper>
