@@ -1,5 +1,9 @@
 package com.project.controller;
 
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -114,11 +118,15 @@ public class DailyReportController {
 		HttpServletUtil.initResponse(response);
 		String userId = request.getParameter("userId");
 		String dateStr = request.getParameter("date");
-		DailyReport dailyReport = new DailyReport();
+		Date date = DateUtils.stringToDate(dateStr);
+		DailyReport dailyReport = dailyReportManager.getByUserIdAndDate(userId, date);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("date", dailyReport.getDate());
+		map.put("workName", dailyReport.getWorkName());
+		map.put("taskAim", dailyReport.getTaskAim());
+		map.put("taskDetail", dailyReport.getTaskDetail());
+		map.put("taskResult", dailyReport.getTaskResult());
 		
-		//Date date = new Da
-		//dailyReportManager.getByUserIdAndDate(userId, date);
-		
-		return HttpServletUtil.getResponseJsonData(0, "得到日报数据成功！");
+		return HttpServletUtil.getResponseJsonData(0, map, "获取日报数据成功！");
 	}
 }
