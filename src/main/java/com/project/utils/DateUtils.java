@@ -14,7 +14,8 @@ public class DateUtils {
 	 */
 	public static final String DATEMONTH_FM = "yyyy-MM",
 			DATE_FM = "yyyy-MM-dd", DATETIME_FM = "yyyy-MM-dd HH:mm:ss",
-			TIME_FM = "HH:mm:ss", DATE_MIGU = "yyyyMMddHH",DATETIME_DETAIL = "yyyyMMddHHmmss";
+			TIME_FM = "HH:mm:ss", DATE_MIGU = "yyyyMMddHH",
+			DATETIME_DETAIL = "yyyyMMddHHmmss";
 
 	
 	public static java.sql.Date stringToDate(String dateStr) {
@@ -24,76 +25,77 @@ public class DateUtils {
 	public static Timestamp stringToTime(String dateStr) {
 		return new java.sql.Timestamp(parse(TIME_FM, dateStr).getTime());
 	}
-	
-	 // 获得当前日期与本周一相差的天数
-    public static  int getMondayPlus(Date date) {
-        Calendar cd = Calendar.getInstance();
-        cd.setTime(date);
-        // 获得今天是一周的第几天，星期日是第一天，星期二是第二天......
-        int dayOfWeek = cd.get(Calendar.DAY_OF_WEEK);
-        if (dayOfWeek == 1) {
-            return -6;
-        } else {
-            return 2 - dayOfWeek;
-        }
-    }
-    
- // 获得当前周- 周一的日期
-    public static  java.sql.Date getCurrentMonday(String dateStr) {
-    	Date date = stringToDate(dateStr);
-        int mondayPlus = getMondayPlus(date);
-        GregorianCalendar currentDate = new GregorianCalendar();
-        currentDate.add(GregorianCalendar.DATE, mondayPlus);
-        Date monday = currentDate.getTime();
-        DateFormat df = DateFormat.getDateInstance();
-        String preMonday = df.format(monday);
-        return stringToDate(preMonday);
-    }
-    
-    // 获得当前周- 周日  的日期
-    public static java.sql.Date getPreviousSunday(String dateStr) {
-    	Date date = stringToDate(dateStr);
-        int mondayPlus = getMondayPlus(date);
-        GregorianCalendar currentDate = new GregorianCalendar();
-        currentDate.add(GregorianCalendar.DATE, mondayPlus +6);
-        Date monday = currentDate.getTime();
-        DateFormat df = DateFormat.getDateInstance();
-        String preMonday = df.format(monday);
-        return stringToDate(preMonday);
-    }
-	
-    // 获得当前月--开始日期
-    public static java.sql.Date getMinMonthDate(String dateStr) {
-    	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    	Calendar calendar = Calendar.getInstance();   
-    	try {
-    		calendar.setTime(dateFormat.parse(dateStr));
-            calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH)); 
-            return stringToDate(dateFormat.format(calendar.getTime()));
-        } catch (java.text.ParseException e) {
-        	e.printStackTrace();
-        }
-        return null;
-    }
 
-    // 获得当前月--结束日期
-    public static java.sql.Date getMaxMonthDate(String date){
-    	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    	Calendar calendar = Calendar.getInstance();
-    	try {
-    		calendar.setTime(dateFormat.parse(date));
-            calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-            return stringToDate(dateFormat.format(calendar.getTime()));
-    	}  catch (java.text.ParseException e) {
-    		e.printStackTrace();
-    	}
-    	return null;
-    }
-	
-	public static java.sql.Date utilDateToSql(Date date){
+	// 获得当前日期与本周一相差的天数
+	public static int getMondayPlus(Date date) {
+		Calendar cd = Calendar.getInstance();
+		cd.setTime(date);
+		// 获得今天是一周的第几天，星期日是第一天，星期二是第二天......
+		int dayOfWeek = cd.get(Calendar.DAY_OF_WEEK);
+		if (dayOfWeek == 1) {
+			return -6;
+		} else {
+			return 2 - dayOfWeek;
+		}
+	}
+
+	// 获得当前周- 周一的日期
+	public static java.sql.Date getCurrentMonday(String dateStr) {
+		Date date = stringToDate(dateStr);
+		int mondayPlus = getMondayPlus(date);
+		GregorianCalendar currentDate = new GregorianCalendar();
+		currentDate.add(GregorianCalendar.DATE, mondayPlus);
+		Date monday = currentDate.getTime();
+		DateFormat df = DateFormat.getDateInstance();
+		String preMonday = df.format(monday);
+		return stringToDate(preMonday);
+	}
+
+	// 获得当前周- 周日 的日期
+	public static java.sql.Date getPreviousSunday(String dateStr) {
+		Date date = stringToDate(dateStr);
+		int mondayPlus = getMondayPlus(date);
+		GregorianCalendar currentDate = new GregorianCalendar();
+		currentDate.add(GregorianCalendar.DATE, mondayPlus + 6);
+		Date monday = currentDate.getTime();
+		DateFormat df = DateFormat.getDateInstance();
+		String preMonday = df.format(monday);
+		return stringToDate(preMonday);
+	}
+
+	// 获得当前月--开始日期
+	public static java.sql.Date getMinMonthDate(String dateStr) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar calendar = Calendar.getInstance();
+		try {
+			calendar.setTime(dateFormat.parse(dateStr));
+			calendar.set(Calendar.DAY_OF_MONTH,
+					calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+			return stringToDate(dateFormat.format(calendar.getTime()));
+		} catch (java.text.ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	// 获得当前月--结束日期
+	public static java.sql.Date getMaxMonthDate(String date) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar calendar = Calendar.getInstance();
+		try {
+			calendar.setTime(dateFormat.parse(date));
+			calendar.set(Calendar.DAY_OF_MONTH,
+					calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+			return stringToDate(dateFormat.format(calendar.getTime()));
+		} catch (java.text.ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static java.sql.Date utilDateToSql(Date date) {
 		return new java.sql.Date(date.getTime());
 	}
-	
 
 	/**
 	 * 格式化参数时间
@@ -193,16 +195,16 @@ public class DateUtils {
 	public static int getDay() {
 		return get(Calendar.DAY_OF_MONTH);
 	}
-	
-	public static int getHour(){
+
+	public static int getHour() {
 		return get(Calendar.HOUR_OF_DAY);
 	}
-	
-	public static int getMin(){
+
+	public static int getMin() {
 		return get(Calendar.MINUTE);
 	}
-	
-	public static int getSec(){
+
+	public static int getSec() {
 		return get(Calendar.SECOND);
 	}
 
@@ -229,6 +231,7 @@ public class DateUtils {
 		int created = year * 100 + mon;
 		return created;
 	}
+
 	/**
 	 * 返回year年份month月份的天数
 	 * 
@@ -255,11 +258,161 @@ public class DateUtils {
 	public static Date getCurDate() {
 		return format(DATE_FM, new Date());
 	}
-	
-	
+
+	/**
+	 * 加减日期
+	 * 
+	 * @param date
+	 * @param days
+	 *
+	 */
+	public static String getAddDate(String date, int days) {
+		Calendar calendar = Calendar.getInstance();
+		String[] calen = date.split("-");
+		int year = Integer.parseInt(calen[0]);
+		int month = Integer.parseInt(calen[1]);
+		int day = Integer.parseInt(calen[2]);
+		calendar.set(year, month - 1, day);
+		calendar.add(Calendar.DAY_OF_MONTH, days);
+		return DateUtils.getDate(calendar.get(Calendar.YEAR)) + "-"
+				+ DateUtils.getDate(calendar.get(Calendar.MONTH) + 1) + "-"
+				+ DateUtils.getDate(calendar.get(Calendar.DAY_OF_MONTH));
+	}
+
+	public static String getDate(int i) {
+		return i < 10 ? "0" + i : i + "";
+	}
+
+	// 获取日期的月初
+	public static Date getMonthStart(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		int index = calendar.get(Calendar.DAY_OF_MONTH);
+		calendar.add(Calendar.DATE, (1 - index));
+		return calendar.getTime();
+	}
+
+	// 获取日期的月末
+	public static Date getMonthEnd(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH, 1);
+		int index = calendar.get(Calendar.DAY_OF_MONTH);
+		calendar.add(Calendar.DATE, (-index));
+		return calendar.getTime();
+	}
+
+	// 获取日期的明天
+	public static Date getNext(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, 1);
+		return calendar.getTime();
+	}
+
+	/**
+	 * 将字符串中的特殊字符转进行转义
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String stringToJson(String s) {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			switch (c) {
+			// case '\"':
+			// sb.append("\\\"");
+			// break;
+			// case '\\': //如果不处理单引号，可以释放此段代码，若结合下面的方法处理单引号就必须注释掉该段代码
+			// sb.append("\\\\");
+			// break;
+			case '/':
+				sb.append("\\/");
+				break;
+			case '\b': // 退格
+				sb.append("\\b");
+				break;
+			case '\f': // 走纸换页
+				sb.append("\\f");
+				break;
+			case '\n':
+				sb.append("\\n"); // 换行
+				break;
+			case '\r': // 回车
+				sb.append("\\r");
+				break;
+			case '\t': // 横向跳格
+				sb.append("\\t");
+				break;
+			default:
+				sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * 根据月份获得天数
+	 * 
+	 * @param month
+	 *            月份
+	 * @param year
+	 *            年份
+	 * @return
+	 */
+	public static int getDayNumberByMonth(int month, int year) {
+		int day = 0;
+		switch (month) {
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+			day = 31;
+			break;
+		case 2:
+			boolean b = isLeapYear(year);
+			if (b) {
+				day = 29;
+			} else {
+				day = 28;
+			}
+			break;
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			day = 30;
+			break;
+		}
+		return day;
+	}
+
+	/**
+	 * 字符串转换成日期
+	 * 
+	 * @param str
+	 * @return date
+	 */
+	public static Date StrToDate(String str) {
+
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = null;
+		try {
+			date = format.parse(str);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
+	}
+
+
 	public static void main(String[] args) {
-		System.out.println(getHour());
-		System.out.println(getMin());
-		//System.out.println(getYYYYMM(new Date()));
+//		DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		// System.out.println(getTrunDecimals("1.23535"));
+
 	}
 }
