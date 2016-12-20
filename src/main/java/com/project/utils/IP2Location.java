@@ -24,7 +24,7 @@ public class IP2Location {
 	private static String GET_SINA_IP_INFO = "http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=%s";
 
 	/**
-	 * 根据IP获取地理位置信息（淘宝链接速度很慢）
+	 * 根据IP获取地理位置信息（淘宝获取速度很慢）
 	 * @param ip
 	 * @return
 	 */
