@@ -3,8 +3,6 @@
  */
 package com.project.utils;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -217,40 +215,6 @@ public class CommonUtils {
 		}
 		qyPassword = StringUtils.trim((String) getconfig().get("qyPassword"));
 		return qyPassword;
-	}
-
-	public static String getClient(String ip, String port, String restURL) {
-		String baseUrl = "";
-		if (ip.startsWith("http")) {
-			baseUrl = ip + ":" + port;
-		} else {
-			baseUrl = "http://" + ip + ":" + port;
-		}
-		String returnstr = "";
-		String tokenname = "";
-		if (restURL.contains("?")) {
-			tokenname = "&token=";
-		} else {
-			tokenname = "?token=";
-		}
-		if (baseUrl.startsWith("https")) {
-			JSONObject jtoken = WeChatUtil.httpsRequest(baseUrl
-					+ "/seeyon/rest/token/" + getrestname() + "/"
-					+ getrestpassword(), "GET", null);
-			returnstr = WeChatUtil
-					.httpsRequestRest(baseUrl + "/seeyon/rest/" + restURL
-							+ tokenname + jtoken.getString("id"), "GET", null);
-
-		} else {
-			JSONObject jtoken = WeChatUtil.httpRequest(baseUrl
-					+ "/seeyon/rest/token/" + getrestname() + "/"
-					+ getrestpassword(), "GET", null);
-			returnstr = WeChatUtil
-					.httpRequestRest(baseUrl + "/seeyon/rest/" + restURL
-							+ tokenname + jtoken.getString("id"), "GET", null);
-
-		}
-		return returnstr;
 	}
 
 	/**
