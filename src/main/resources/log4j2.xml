@@ -6,7 +6,7 @@
 			<PatternLayout pattern="%d{yyyy-MM-dd  HH:mm:ss} %-5level %class{36} %M  %L - %msg%xEx%n" />
 		</Console>
 		
-		<RollingFile name="traceFile" fileName="${web:rootDir}/logs/trace.log" filePattern="logs/trace_%d{yyyy-MM-dd}_%i.log.gz" bufferedIO ="true">
+		<RollingFile name="traceFile" fileName="logs/trace.log" filePattern="logs/trace_%d{yyyy-MM-dd}_%i.log.gz" bufferedIO ="true">
 			<filters>
 				<ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL" />
 				<ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL" />
@@ -18,7 +18,7 @@
 			<SizeBasedTriggeringPolicy size="125MB"/>
 		</RollingFile>
 		
-		<RollingFile name="debugFile" fileName="${web:rootDir}/logs/debug.log" filePattern="logs/debug_%d{yyyy-MM-dd}_%i.log.gz" bufferedIO ="true">
+		<RollingFile name="debugFile" fileName="logs/debug.log" filePattern="logs/debug_%d{yyyy-MM-dd}_%i.log.gz" bufferedIO ="true">
 			<filters>
 				<ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL" />
 				<ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL" />
@@ -29,7 +29,7 @@
 			<SizeBasedTriggeringPolicy size="125MB"/>
 		</RollingFile>
 		
-		<RollingFile name="infoFile" fileName="${web:rootDir}/logs/info.log" filePattern="logs/info_%d{yyyy-MM-dd}_%i.log.gz" bufferedIO ="true">
+		<RollingFile name="infoFile" fileName="logs/info.log" filePattern="logs/info_%d{yyyy-MM-dd}_%i.log.gz" bufferedIO ="true">
 			<filters>
 				<ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL" />
 				<ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL" />
@@ -39,7 +39,7 @@
 			<SizeBasedTriggeringPolicy size="125MB"/>
 		</RollingFile>
 		
-		<RollingFile name="warnFile" fileName="${web:rootDir}/logs/warn.log" filePattern="logs/warn_%d{yyyy-MM-dd}_%i.log.gz" bufferedIO ="true">
+		<RollingFile name="warnFile" fileName="logs/warn.log" filePattern="logs/warn_%d{yyyy-MM-dd}_%i.log.gz" bufferedIO ="true">
 			<filters>
 				<ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL" />
 				<ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY" />
@@ -48,7 +48,7 @@
 			<SizeBasedTriggeringPolicy size="125MB"/>
 		</RollingFile>
 		
-		<RollingFile name="errorFile" fileName="${web:rootDir}/logs/error.log" filePattern="logs/error_%d{yyyy-MM-dd}_%i.log.gz" bufferedIO ="true">
+		<RollingFile name="errorFile" fileName="logs/error.log" filePattern="logs/error_%d{yyyy-MM-dd}_%i.log.gz" bufferedIO ="true">
 			<filters>
 				<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
 			</filters>
