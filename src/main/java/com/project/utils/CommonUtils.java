@@ -1,16 +1,28 @@
-/**
- * 
- */
 package com.project.utils;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+
+import javax.imageio.ImageIO;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -18,13 +30,9 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.Random;
 
-/**
- * @author Macx
- *
- */
 public class CommonUtils {
 
-	private static final Log log = LogFactory.getLog(CommonUtils.class);
+	private static final Logger LOG = LogManager.getLogger(CommonUtils.class);
 
 	private static String wxURL;
 
@@ -92,23 +100,25 @@ public class CommonUtils {
 		try {
 			config.load(input);
 		} catch (IOException e) {
-			log.error("加载配置文件中的内容失败", e);
+			LOG.error("加载配置文件中的内容失败", e);
 			e.printStackTrace();
 		}
 		return config;
 	}
 
 	public static String getwxurl() {
-		if (!StringUtils.isEmpty(wxURL)) {
+		if (wxURL != null && !"".equals(wxURL)) {
 			return wxURL;
 		}
-
-		wxURL = StringUtils.trim((String) getconfig().get("wx_url"));
+		String wxUrl = getconfig().get("wx_url").toString();
+		if (wxUrl != null) {
+			wxURL = wxUrl.trim();
+		}
 		return wxURL;
 	}
 
 	public static String getDeployModel() {
-		if (!StringUtils.isEmpty(model)) {
+		if (model != null && !"".equals(model)) {
 			return model;
 		}
 		model = StringUtils.trim((String) getconfig().get("deploy_model"));
@@ -116,7 +126,7 @@ public class CommonUtils {
 	}
 
 	public static String getDeployment() {
-		if (!StringUtils.isEmpty(deployment)) {
+		if (deployment != null && !"".equals(deployment)) {
 			return deployment;
 		}
 		deployment = StringUtils.trim((String) getconfig().get("deployment"));
@@ -124,30 +134,35 @@ public class CommonUtils {
 	}
 
 	public static String getrestname() {
-		if (!StringUtils.isEmpty(RESTNAME)) {
+		if (RESTNAME != null && !"".equals(RESTNAME)) {
 			return RESTNAME;
 		}
-
-		RESTNAME = StringUtils.trim((String) getconfig().get("rest_name"));
+		String restname = getconfig().get("rest_name").toString();
+		if (restname != null) {
+			RESTNAME = restname.trim();
+		}
 		return RESTNAME;
 	}
 
 	public static String getrestpassword() {
-		if (!StringUtils.isEmpty(RESTPASSWORD)) {
+		if (RESTPASSWORD != null && !"".equals(RESTPASSWORD)) {
 			return RESTPASSWORD;
 		}
-
-		RESTPASSWORD = StringUtils.trim((String) getconfig().get(
-				"rest_password"));
+		String restPassword = getconfig().get("rest_password").toString();
+		if (restPassword != null) {
+			RESTPASSWORD = restPassword.trim();
+		}
 		return RESTPASSWORD;
 	}
 
 	public static String getappid() {
-		if (!StringUtils.isEmpty(APPID)) {
+		if (APPID != null && !"".equals(APPID)) {
 			return APPID;
 		}
-
-		APPID = StringUtils.trim((String) getconfig().get("appid"));
+		String appId = getconfig().get("appid").toString();
+		if (appId != null) {
+			APPID = appId.trim();
+		}
 		return APPID;
 	}
 
@@ -335,6 +350,74 @@ public class CommonUtils {
 		DecimalFormat df = new DecimalFormat("0.00"); // 保留2位小数
 		double price = Double.parseDouble(orderMoney);
 		return df.format(price);
+	}
+
+	/**
+	 * 创建图片缩略图
+	 * 
+	 * @param filename
+	 * @param thumbWidth
+	 * @param thumbHeight
+	 * @param quality
+	 * @param outFilename
+	 * @throws InterruptedException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static void createThumbnail(String filename, int thumbWidth,
+			int thumbHeight, int quality, String outFilename)
+			throws InterruptedException, FileNotFoundException, IOException {
+		// load image from filename
+		Image image = Toolkit.getDefaultToolkit().getImage(filename);
+		MediaTracker mediaTracker = new MediaTracker(new Container());
+		mediaTracker.addImage(image, 0);
+		mediaTracker.waitForID(0);
+		// use this to test for errors at this point:
+		// System.out.println(mediaTracker.isErrorAny());
+
+		// determine thumbnail size from WIDTH and HEIGHT
+		double thumbRatio = (double) thumbWidth / (double) thumbHeight;
+		int imageWidth = image.getWidth(null);
+		int imageHeight = image.getHeight(null);
+		double imageRatio = (double) imageWidth / (double) imageHeight;
+		if (thumbRatio < imageRatio) {
+			thumbHeight = (int) (thumbWidth / imageRatio);
+		} else {
+			thumbWidth = (int) (thumbHeight * imageRatio);
+		}
+
+		// draw original image to thumbnail image object and
+		// scale it to the new size on-the-fly
+		BufferedImage thumbImage = new BufferedImage(thumbWidth, thumbHeight,
+				BufferedImage.TYPE_INT_RGB);
+		Graphics2D graphics2D = thumbImage.createGraphics();
+		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		graphics2D.drawImage(image, 0, 0, thumbWidth, thumbHeight, null);
+
+		// save thumbnail image to outFilename
+		BufferedOutputStream out = new BufferedOutputStream(
+				new FileOutputStream(outFilename));
+		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+		JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(thumbImage);
+		quality = Math.max(0, Math.min(quality, 100));
+		param.setQuality((float) quality / 100.0f, false);
+		encoder.setJPEGEncodeParam(param);
+		encoder.encode(thumbImage);
+		out.close();
+	}
+
+	/**
+	 * 抓屏程序
+	 * @param fileName
+	 * @throws Exception
+	 */
+	public static void captureScreen(String fileName) throws Exception {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Rectangle screenRectangle = new Rectangle(screenSize);
+		Robot robot = new Robot();
+		BufferedImage image = robot.createScreenCapture(screenRectangle);
+		ImageIO.write(image, "png", new File(fileName));
 	}
 
 	public static void main(String[] args) {
