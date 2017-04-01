@@ -27,6 +27,7 @@ public class ActivemqController {
 	
 	/**
 	 * 发送消息到队列
+	 * queueSender是监听的队列只有一个能处理
 	 * @param message
 	 * @return
 	 */
@@ -42,6 +43,11 @@ public class ActivemqController {
 		return HttpServletUtil.getResponseJsonData(0, "activemq queue sender success");
 	}
 	
+	/**
+	 * topicSender是监听的队列所有都能通知到
+	 * @param message
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/topicSender")
 	public String topicSender(@RequestParam("message") String message) {
