@@ -3,7 +3,6 @@
  */
 package com.project.utils;
 
-import com.project.entity.Account;
 import com.qq.weixin.mp.aes.AesException;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import com.thoughtworks.xstream.XStream;
@@ -23,10 +22,10 @@ import java.util.Set;
  *
  */
 public class MessageUtil {
-    
+	
     public static Set<String> msgSet = new HashSet<String>();
-    
-    public static String sendMessage(InputMessage oms, String msg, WXBizMsgCrypt wxcpt, String timestamp, String nonce) {
+
+	public static String sendMessage(InputMessage oms, String msg, WXBizMsgCrypt wxcpt, String timestamp, String nonce) {
         //发送文本消息 start
         XStream xstream = new XStream(new XppDriver() {
             @Override
@@ -158,6 +157,13 @@ public class MessageUtil {
         ToUserName.set(oms, msg.getFromUserName());
         FromUserName.set(oms, msg.getToUserName());
     }
+    
+    /**
+     * 调用客户接口发送图文消息
+     * @param toUser
+     * @param outputMsg
+     * @return
+     */
     public static int sendCustomNewsMessage(String toUser, NewsOutputMessage outputMsg){
         AccessToken at = WeChatUtil.getAccessToken(CommonUtils.getappid(), CommonUtils.getappsecret());
         int result = 0;
@@ -182,77 +188,22 @@ public class MessageUtil {
         return result;
     }
     
+    /**
+     * 调用客服接口发送普通消息
+     * @param toUser
+     * @param messageType
+     * @param content
+     * @return
+     */
     public static int sendCustomMessage(String toUser, String messageType, String content){
         AccessToken at = WeChatUtil.getAccessToken(CommonUtils.getappid(), CommonUtils.getappsecret());
         int result = 0;
         if ((at != null) && (at.getToken() != null)){
             StringBuffer sb = new StringBuffer();
             sb.append("{\"touser\":\""+toUser+"\",");
-            sb.append("\"msgtype\":\""+messageType+"\",");
+            sb.append("\"msgtype\":\"text\",");
             sb.append("\"text\":{\"content\":\""+content+"\"}");
             result = WeChatUtil.sendCustomMsg(sb.toString(), at.getToken());
-        }
-        return result;
-    }
-    public static int sendCustomMessage(String toUser, String messageType, String content,String acctoken){
-        //AccessToken at = WeChatUtil.getAccessToken(CommonUtils.getappid(), CommonUtils.getappsecret());
-        int result = 0;
-        if (acctoken != null){
-            StringBuffer sb = new StringBuffer();
-            sb.append("{\"touser\":\""+toUser+"\",");
-            sb.append("\"msgtype\":\""+messageType+"\",");
-            sb.append("\"text\":{\"content\":\""+content+"\"}");
-            result = WeChatUtil.sendCustomMsg(sb.toString(), acctoken);
-        }
-        return result;
-    }
-    
-    public static int sendNewsMessage_qy(String toUser, NewsOutputMessage outputMsg,Account account){
-        int result = 0;
-        AccessToken at = null;
-        if(account.getPermanentcode()!=null&&!account.getPermanentcode().equals("")){
-            at = WeChatUtil.getQyAccessToken_callback(account.getPermanentcode(),account.getCorpid());
-        }else{
-            at = WeChatUtil.getQyAccessToken(account.getCorpid(), account.getQySecret());
-
-        }
-        if ((at != null) && (at.getToken() != null)){
-            StringBuffer sb = new StringBuffer();
-            sb.append("{\"touser\":\""+toUser+"\",");
-            sb.append("\"msgtype\":\"news\",");
-            sb.append("\"agentid\":\""+account.getAgentid()+"\",");
-            sb.append("\"news\":{\"articles\":[");
-            for(int i=0;i<Integer.valueOf(outputMsg.getArticleCount());i++){
-                sb.append("{\"title\":\""+outputMsg.getArticles().get(i).getTitle()+"\",\n");
-                //sb.append("\"description\":\""+outputMsg.getArticles().get(i).getDescription()+"\",\n");
-                sb.append("\"url\":\""+outputMsg.getArticles().get(i).getUrl()+"\",\n");
-                sb.append("\"picurl\":\""+outputMsg.getArticles().get(i).getPicUrl()+"\"\n");
-                sb.append("}");
-                if(i!=Integer.valueOf(outputMsg.getArticleCount())-1){
-                    sb.append(",");
-                }
-            }
-            sb.append("]}");
-            result = WeChatUtil.sendTextMessage_qy(sb.toString(), at.getToken());
-        }
-        return result;
-    }
-    public static int sendTextMessage_qy(String toUser, String content,Account account){
-        int result = 0;
-        AccessToken at = null;
-        if(account.getPermanentcode()!=null&&!account.getPermanentcode().equals("")){
-            at = WeChatUtil.getQyAccessToken_callback(account.getPermanentcode(),account.getCorpid());
-        }else{
-            at = WeChatUtil.getQyAccessToken(account.getCorpid(), account.getQySecret());
-
-        }
-        if ((at != null) && (at.getToken() != null)){
-            StringBuffer sb = new StringBuffer();
-            sb.append("{\"touser\":\""+toUser+"\",");
-            sb.append("\"msgtype\":\"text\",");
-            sb.append("\"agentid\":\""+account.getAgentid()+"\",");
-            sb.append("\"text\":{\"content\":\""+content+"\"}}");
-            result = WeChatUtil.sendTextMessage_qy(sb.toString(), at.getToken());
         }
         return result;
     }
@@ -279,25 +230,4 @@ public class MessageUtil {
         return result;
     }
     
-    public static int sendGroupTextMsg_qy(String toAgentid, Account account, String content){
-        int result = 0;
-        AccessToken at = null;
-        if(account.getPermanentcode()!=null&&!account.getPermanentcode().equals("")){
-            at = WeChatUtil.getQyAccessToken_callback(account.getPermanentcode(),account.getCorpid());
-        }else{
-            at = WeChatUtil.getQyAccessToken(account.getCorpid(), account.getQySecret());
-
-        }
-        StringBuffer sb = new StringBuffer();
-        sb.append("{\"touser\":\"@all\",");
-        sb.append("\"msgtype\":\"text\",");
-        sb.append("\"agentid\":\""+toAgentid+"\",");
-        sb.append("\"text\":{\"content\":\""+content+"\"}");
-        if ((at != null) && (at.getToken() != null)) {
-            result = WeChatUtil.sendTextMessage_qy(sb.toString(), at.getToken());
-        }else{
-            result = WeChatUtil.sendTextMessage_qy(sb.toString(), "");
-        }
-        return result;
-    }
 }
