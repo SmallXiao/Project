@@ -1,6 +1,8 @@
 package com.project.utils;
 
 import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
 
 public class Base64 {
 	
@@ -8,7 +10,7 @@ public class Base64 {
 	public static String encode(String s) {
 		if (s == null)
 			return null;
-		return (new sun.misc.BASE64Encoder()).encode(s.getBytes());
+		return (new BASE64Encoder()).encode(s.getBytes());
 	}
 
 	// 将 BASE64 编码的字符串 s 进行解码
