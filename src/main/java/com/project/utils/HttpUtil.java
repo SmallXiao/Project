@@ -33,7 +33,9 @@ import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 
 public class HttpUtil {
 
@@ -188,7 +190,7 @@ public class HttpUtil {
 			inputStream = null;
 			httpUrlConn.disconnect();
 			httpUrlConn = null;
-			jsonObject = JSONObject.fromObject(buffer.toString());
+			jsonObject = JSON.parseObject(buffer.toString());
 		} catch (ConnectException ce) {
 			log.error("微信服务器连接超时！", ce);
 		} catch (Exception e) {
@@ -243,7 +245,7 @@ public class HttpUtil {
 			inputStream = null;
 			httpUrlConn.disconnect();
 			httpUrlConn = null;
-			jsonObject = JSONObject.fromObject(buffer.toString());
+			jsonObject = JSON.parseObject(buffer.toString());
 		} catch (ConnectException ce) {
 			log.error("微信服务器连接超时！", ce);
 		} catch (Exception e) {
@@ -274,7 +276,7 @@ public class HttpUtil {
 			if (entity != null) {
 				String resultStr = EntityUtils.toString(entity, "utf-8");
 
-				JSONObject result = JSONObject.fromObject(resultStr);
+				JSONObject result = JSON.parseObject(resultStr);
 				return result;
 			}
 		} catch (Exception e) {
@@ -316,7 +318,7 @@ public class HttpUtil {
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {
 				String resultStr = EntityUtils.toString(entity, "UTF-8");
-				JSONObject result = JSONObject.fromObject(resultStr);
+				JSONObject result = JSON.parseObject(resultStr);
 				return result;
 			}
 		} catch (Exception e) {
@@ -529,7 +531,7 @@ public class HttpUtil {
 			inputStream = null;
 			httpUrlConn.disconnect();
 			httpUrlConn = null;
-			jsonObject = JSONObject.fromObject(buffer.toString());
+			jsonObject = JSON.parseObject(buffer.toString());
 		} catch (ConnectException ce) {
 			log.error("微信服务器连接超时！", ce);
 		} catch (Exception e) {
@@ -537,60 +539,50 @@ public class HttpUtil {
 		}
 		return jsonObject;
 	}
-	
-	public static JSONObject httpRequesttemp(String requestUrl,
-			String requestMethod, String outputStr) {
-		JSONObject jsonObject = null;
-		StringBuffer buffer = new StringBuffer();
-		try {
-			// TrustManager[] tm = { new TrustManager() };
 
-			URL url = new URL(requestUrl);
-			HttpURLConnection httpUrlConn = (HttpURLConnection) url
-					.openConnection();
-
-			// httpUrlConn.setDoOutput(true);
-			// httpUrlConn.setDoInput(true);
-			// httpUrlConn.setUseCaches(false);
-
-			httpUrlConn.setRequestMethod(requestMethod);
-
-			if ("GET".equalsIgnoreCase(requestMethod)) {
-				httpUrlConn.connect();
-			}
-
-			if (outputStr != null) {
-				OutputStream outputStream = httpUrlConn.getOutputStream();
-
-				outputStream.write(outputStr.getBytes("UTF-8"));
-				outputStream.close();
-			}
-
-			InputStream inputStream = httpUrlConn.getInputStream();
-			InputStreamReader inputStreamReader = new InputStreamReader(
-					inputStream, "utf-8");
-			BufferedReader bufferedReader = new BufferedReader(
-					inputStreamReader);
-
-			String str = null;
-			while ((str = bufferedReader.readLine()) != null) {
-				buffer.append(str);
-			}
-			bufferedReader.close();
-			inputStreamReader.close();
-
-			inputStream.close();
-			inputStream = null;
-			httpUrlConn.disconnect();
-			httpUrlConn = null;
-			// jsonObject = JSONObject.fromObject(buffer.toString());
-		} catch (ConnectException ce) {
-			log.error("微信服务器连接超时！", ce);
-		} catch (Exception e) {
-			log.error("HTTP请求错误!", e);
-		}
-		return jsonObject;
+	/**
+	 * 信任所有https的证书，有风险，不建议使用
+	 * 
+	 * @throws Exception
+	 */
+	public static void trustAllHttpsCertificates() throws Exception {
+		javax.net.ssl.TrustManager[] trustAllCerts = new javax.net.ssl.TrustManager[1];
+		javax.net.ssl.TrustManager tm = new x509TrustManager();
+		trustAllCerts[0] = tm;
+		javax.net.ssl.SSLContext sc = javax.net.ssl.SSLContext
+				.getInstance("SSL");
+		sc.init(null, trustAllCerts, null);
+		javax.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory(sc
+				.getSocketFactory());
 	}
-	
+
+	static class x509TrustManager implements javax.net.ssl.TrustManager,
+			javax.net.ssl.X509TrustManager {
+		public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+			return null;
+		}
+
+		public boolean isServerTrusted(
+				java.security.cert.X509Certificate[] certs) {
+			return true;
+		}
+
+		public boolean isClientTrusted(
+				java.security.cert.X509Certificate[] certs) {
+			return true;
+		}
+
+		public void checkServerTrusted(
+				java.security.cert.X509Certificate[] certs, String authType)
+				throws java.security.cert.CertificateException {
+			return;
+		}
+
+		public void checkClientTrusted(
+				java.security.cert.X509Certificate[] certs, String authType)
+				throws java.security.cert.CertificateException {
+			return;
+		}
+	}
 
 }
