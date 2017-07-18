@@ -11,8 +11,8 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 public class RedisConnection {
 	
-	private static String host = "127.0.0.1";// redis地址
-	private static Integer port = 6379;// redis端口
+	private static final String host = "127.0.0.1";// redis地址
+	private static final Integer port = 6379;// redis端口
 	
 	public static class RedisSource {
 
@@ -21,9 +21,10 @@ public class RedisConnection {
 		public static JedisPool getPool() {
 			if (null == pool) {
 				JedisPoolConfig poolConfig = new JedisPoolConfig();
-				poolConfig.setMaxIdle(20);//20
-				poolConfig.setTimeBetweenEvictionRunsMillis(180000L);
-				poolConfig.setTestOnBorrow(true);
+				poolConfig.setMaxIdle(20);//20 最大空闲连接数
+				poolConfig.setMaxWaitMillis(1000);// 最大等待时间
+				poolConfig.setTimeBetweenEvictionRunsMillis(180000L);// 逐出扫描的时间间隔，如果为负数不运行逐出扫描，默认-1
+				poolConfig.setTestOnBorrow(true);// 获取连接时检查有效性，默认false
 				pool = new JedisPool(poolConfig, host, port, 180000);
 			}
 			return pool;
