@@ -34,6 +34,11 @@
 
 	<mappers>
 		<mapper resource="mybatis/mapper/UserMapper.xml" />
-
+		<mapper resource="mybatis/mapper/MemberMapper.xml" />
+		<mapper resource="mybatis/mapper/DailyReportMapper.xml" />
+		<mapper resource="mybatis/mapper/WeekReportMapper.xml" />
+		<mapper resource="mybatis/mapper/MonthReportMapper.xml" />
+		<mapper resource="mybatis/mapper/YearReportMapper.xml" />
+		<mapper resource="mybatis/mapper/EmailMapper.xml" />
 	</mappers>
 </configuration>
