@@ -30,7 +30,7 @@ public class MonthReportManagerImpl implements MonthReportManager{
 	}
 
 	@Override
-	public MonthReport getByUserIdAndMonth(String userId, Date date) {
+	public MonthReport getByUserId(String userId, Date date) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -8,7 +8,7 @@ import com.project.manager.WechatMemberManager;
 
 public class WechatMemberManagerImpl implements WechatMemberManager{
 
-	private static Logger log = LogManager.getLogger(WechatMemberManagerImpl.class);
+	private static Logger LOG = LogManager.getLogger(WechatMemberManagerImpl.class);
 	
 	public WechatMember getWechatMemberByUserId(String userId, String accountId) {
 		return null;

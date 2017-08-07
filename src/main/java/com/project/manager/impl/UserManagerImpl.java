@@ -12,7 +12,7 @@ import com.project.mapper.UserMapper;
 @Service("userManager")
 public class UserManagerImpl implements UserManager{
 
-	private static Logger log = LogManager.getLogger(UserManagerImpl.class);
+	private static Logger LOG = LogManager.getLogger(UserManagerImpl.class);
 	
 	@Autowired
 	private UserMapper userMapper;
@@ -20,8 +20,19 @@ public class UserManagerImpl implements UserManager{
 	public void save(User user) {
 		userMapper.save(user);
 		
-		log.info("保存数据成功！");
-		log.error("保存数据");
+		LOG.info("保存数据成功！");
+		LOG.info("保存数据");
+	}
+
+	@Override
+	public User getUserByOpenId(String openid) {
+		return null;
+	}
+
+	@Override
+	public void deleteUserByOpenId(String openid) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

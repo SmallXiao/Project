@@ -10,7 +10,7 @@ import com.project.manager.MemberManager;
 @Service("memberManager")
 public class MemberManagerImpl implements MemberManager{
 
-	private static Logger log = LogManager.getLogger(MemberManagerImpl.class);
+	private static Logger LOG = LogManager.getLogger(MemberManagerImpl.class);
 
 	@Override
 	public void save(WechatMember member) {

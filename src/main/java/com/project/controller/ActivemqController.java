@@ -17,7 +17,7 @@ import com.project.utils.HttpServletUtil;
 @RequestMapping("/activemq")
 public class ActivemqController {
 
-	private static Logger LOG = LogManager.getLogger(ActivemqController.class);
+	private static final Logger LOG = LogManager.getLogger(ActivemqController.class);
 	
 	@Resource
 	private QueueSender queueSender;

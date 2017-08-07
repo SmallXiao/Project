@@ -94,4 +94,15 @@ public class MonthReport {
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
 	}
+	@Override
+	public String toString() {
+		return "MonthReport [id=" + id + ", beginDate=" + beginDate
+				+ ", endDate=" + endDate + ", workName=" + workName
+				+ ", taskAim=" + taskAim + ", taskDetail=" + taskDetail
+				+ ", taskResult=" + taskResult + ", userId=" + userId
+				+ ", companyId=" + companyId + ", MonthOfYear=" + MonthOfYear
+				+ ", createTime=" + createTime + ", updateTime=" + updateTime
+				+ "]";
+	}
+	
 }

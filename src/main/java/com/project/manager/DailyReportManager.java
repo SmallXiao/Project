@@ -28,14 +28,14 @@ public interface DailyReportManager {
 	/**
 	 * 获取某人某天的日报信息
 	 */
-	public DailyReport getByUserIdAndDate(String userId, Date date);
+	public DailyReport getByUserId(String userId, Date date);
 	
 	/**
 	 * 获取某公司某天的日报信息
 	 * @param companyId
 	 * @param date
 	 */
-	public List<DailyReport> getByCompanyIdAndDate(String companyId, Date date);
+	public List<DailyReport> getByCompanyId(String companyId, Date date);
 	
 	
 }

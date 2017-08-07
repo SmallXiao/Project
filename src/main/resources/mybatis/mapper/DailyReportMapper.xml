@@ -18,4 +18,8 @@
 			WHERE user_id=#{userId} AND date=#{date}
 	</update>
 	
+	<select id="getByUserIdAndDate" parameterType="java.lang.String">
+		SELECT * FROM daily_report WHERE user_id=#{userId} AND date=#{date}
+	</select>
+	
 </mapper>

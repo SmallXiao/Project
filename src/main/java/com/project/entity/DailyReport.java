@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  */
 public class DailyReport {
 	
-	private Long id;
+	private long id;
 	private Date date;// 日期
 	private String workName;// 项目名称、团队名称、工作名称
 	private String taskAim;// 任务目标
@@ -21,10 +21,10 @@ public class DailyReport {
 	private Timestamp createTime;// 创建时间
 	private Timestamp updateTime;// 更新时间
 	
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public Date getDate() {
@@ -81,4 +81,13 @@ public class DailyReport {
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
 	}
+	@Override
+	public String toString() {
+		return "DailyReport [id=" + id + ", date=" + date + ", workName="
+				+ workName + ", taskAim=" + taskAim + ", taskDetail="
+				+ taskDetail + ", taskResult=" + taskResult + ", userId="
+				+ userId + ", companyId=" + companyId + ", createTime="
+				+ createTime + ", updateTime=" + updateTime + "]";
+	}
+	
 }

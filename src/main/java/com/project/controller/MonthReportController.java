@@ -1,5 +1,9 @@
 package com.project.controller;
 
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.project.entity.DailyReport;
 import com.project.entity.MonthReport;
 import com.project.manager.MonthReportManager;
 import com.project.utils.DateUtils;
@@ -24,7 +27,7 @@ public class MonthReportController {
 	private MonthReportManager monthReportManager;
 	
 	/**
-	 * 保存日报信息
+	 * 保存月报信息
 	 * @param request
 	 * @param response
 	 * @return
@@ -111,17 +114,21 @@ public class MonthReportController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value="/getByDay", method=RequestMethod.GET)
+	@RequestMapping(value="/getByUserId", method=RequestMethod.GET)
 	@ResponseBody
 	public String getByDay(HttpServletRequest request, HttpServletResponse response){
 		HttpServletUtil.initResponse(response);
 		String userId = request.getParameter("userId");
 		String dateStr = request.getParameter("date");
-		DailyReport dailyReport = new DailyReport();
+		Date date = DateUtils.stringToDate(dateStr);
+		MonthReport monthReport = monthReportManager.getByUserId(userId, date);
+		Map<String, Object> map = new HashMap<String, Object>();
 		
-		//Date date = new Da
-		//dailyReportManager.getByUserIdAndDate(userId, date);
+		map.put("workName", monthReport.getWorkName());
+		map.put("taskAim", monthReport.getTaskAim());
+		map.put("taskDetail", monthReport.getTaskDetail());
+		map.put("taskResult", monthReport.getTaskResult());
 		
-		return HttpServletUtil.getResponseJsonData(0, "得到月报数据成功！");
+		return HttpServletUtil.getResponseJsonData(0, map, "得到月报数据成功！");
 	}
 }

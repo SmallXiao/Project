@@ -27,7 +27,7 @@ public interface MonthReportManager {
 	/**
 	 * 获取某人某月的月报信息
 	 */
-	public MonthReport getByUserIdAndMonth(String userId, Date date);
+	public MonthReport getByUserId(String userId, Date date);
 	
 	/**
 	 * 获取某公司某月所有人的月报信息

@@ -70,7 +70,6 @@ public class DailyReportController {
 		HttpServletUtil.initResponse(response);
 		String dateStr= request.getParameter("date");
 		String userId = request.getParameter("userId");
-		
 		dailyReportManager.delete(userId, DateUtils.stringToDate(dateStr));
 		
 		return HttpServletUtil.getResponseJsonData(0, "删除日报数据成功！");
@@ -119,7 +118,7 @@ public class DailyReportController {
 		String userId = request.getParameter("userId");
 		String dateStr = request.getParameter("date");
 		Date date = DateUtils.stringToDate(dateStr);
-		DailyReport dailyReport = dailyReportManager.getByUserIdAndDate(userId, date);
+		DailyReport dailyReport = dailyReportManager.getByUserId(userId, date);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("date", dailyReport.getDate());
 		map.put("workName", dailyReport.getWorkName());
