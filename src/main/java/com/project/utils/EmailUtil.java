@@ -1,7 +1,11 @@
 package com.project.utils;
 
+import java.io.File;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.Transport;
@@ -9,7 +13,10 @@ import javax.mail.Message.RecipientType;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,8 +49,9 @@ public class EmailUtil {
 	 * @param bccEmailAddress		密送人
 	 * @param title							标题
 	 * @param content					邮件正文
+	 * @param attachment				附件
 	 */
-	public static void sendSinaEmail(String toEmailAddress, String ccEmailAddress, String bccEmailAddress, String title, String content) throws Exception{
+	public static void sendSinaEmail(String toEmailAddress, String ccEmailAddress, String bccEmailAddress, String title, String content, String attachment) throws Exception{
 		Properties props = new Properties();
 //		props.setProperty("mail.debug", "true");// 开启debug调试
 		props.setProperty("mail.smtp.auth", "true");// 发送服务器需要身份验证
@@ -70,7 +78,23 @@ public class EmailUtil {
 			msg.setRecipient(RecipientType.BCC, new InternetAddress(bccEmailAddress));// 暗送人
 		}
 		msg.setSubject(title);// 邮件标题
-		msg.setContent(content, "text/html;charset=UTF-8");// HTML内容
+		
+		
+		MimeMultipart mimeMultipart = new MimeMultipart();
+		
+		MimeBodyPart bodyPart = new MimeBodyPart();
+		bodyPart.setContent(content, "text/html;charset=UTF-8");// HTML内容
+		mimeMultipart.addBodyPart(bodyPart);
+		
+		if (attachment != null && !"".equals(attachment)) {
+			MimeBodyPart attachBodyPart = new MimeBodyPart();
+			DataSource dataSource = new FileDataSource(new File(attachment));
+			
+			attachBodyPart.setDataHandler(new DataHandler(dataSource));
+			attachBodyPart.setFileName(MimeUtility.encodeText(attachment));
+			mimeMultipart.addBodyPart(attachBodyPart);
+		}
+		msg.setContent(mimeMultipart);
 		
 		Transport.send(msg);// 连接邮件服务器、发送邮件、关闭连接
 		
@@ -124,7 +148,9 @@ public class EmailUtil {
 	
 	public static void main(String[] args) {
 		try {
-			sendQQEmail("sunxiao_45@sina.com", null, null, "test", "send message!");
+			
+			sendSinaEmail("sunxiao_45@sina.com", null, null, "test", "send message!", "6月份_ASM开发排期_第二期_20170619_java.xlsx");
+//			sendQQEmail("sunxiao_45@sina.com", null, null, "test", "send message!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
