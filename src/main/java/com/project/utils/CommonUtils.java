@@ -24,11 +24,15 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Random;
+import java.util.zip.CRC32;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class CommonUtils {
 
@@ -339,7 +343,7 @@ public class CommonUtils {
 
 		return str;
 	}
-	
+
 	/**
 	 * 将价格转换为小数位，保留2位
 	 * 
@@ -409,6 +413,7 @@ public class CommonUtils {
 
 	/**
 	 * 抓屏程序
+	 * 
 	 * @param fileName
 	 * @throws Exception
 	 */
@@ -425,5 +430,93 @@ public class CommonUtils {
 		System.out.println(replaceStringNULL("\"null\""));
 
 	}
+
+	/**
+	 * 使用iText JAR生成PDF
+	 */
+	public void GeneratePDF() {
+		/*
+		 * try { OutputStream file = new FileOutputStream(new
+		 * File("C:\\Test.pdf"));
+		 * 
+		 * Document document = new Document(); PdfWriter.getInstance(document,
+		 * file); document.open(); document.add(new Paragraph("Hello Kiran"));
+		 * document.add(new Paragraph(new Date().toString()));
+		 * 
+		 * document.close(); file.close();
+		 * 
+		 * } catch (Exception e) {
+		 * 
+		 * e.printStackTrace(); }
+		 */
+	}
+
+	/**
+	 * 创建ZIP和JAR文件
+	 * 
+	 * @param fileName
+	 * @param zipName
+	 * @throws IOException
+	 */
+	public void zipIt(String fileName, String[] zipName) throws IOException {
+
+		File zipFile = new File(fileName);
+		if (zipFile.exists()) {
+			System.err.println("Zip file already exists, please try another");
+			System.exit(-2);
+		}
+		FileOutputStream fos = new FileOutputStream(zipFile);
+		ZipOutputStream zos = new ZipOutputStream(fos);
+		int bytesRead;
+		byte[] buffer = new byte[1024];
+		CRC32 crc = new CRC32();
+		for (int i = 1, n = zipName.length; i < n; i++) {
+			String name = zipName[i];
+			File file = new File(name);
+			if (!file.exists()) {
+				System.err.println("Skipping: " + name);
+				continue;
+			}
+			BufferedInputStream bis = new BufferedInputStream(
+					new FileInputStream(file));
+			crc.reset();
+			while ((bytesRead = bis.read(buffer)) != -1) {
+				crc.update(buffer, 0, bytesRead);
+			}
+			bis.close();
+			// Reset to beginning of input stream
+			bis = new BufferedInputStream(new FileInputStream(file));
+			ZipEntry entry = new ZipEntry(name);
+			entry.setMethod(ZipEntry.STORED);
+			entry.setCompressedSize(file.length());
+			entry.setSize(file.length());
+			entry.setCrc(crc.getValue());
+			zos.putNextEntry(entry);
+			while ((bytesRead = bis.read(buffer)) != -1) {
+				zos.write(buffer, 0, bytesRead);
+			}
+			bis.close();
+		}
+		zos.close();
+	}
+
+	/**
+	 * 发送带数据的HTTP请求
+	 */
+	public void sendHttpData() {
+		try {
+			URL my_url = new URL("http://coolshell.cn/");
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					my_url.openStream()));
+			String strTemp = "";
+			while (null != (strTemp = br.readLine())) {
+				System.out.println(strTemp);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	
 
 }
